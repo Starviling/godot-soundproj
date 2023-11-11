@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://fyt4ss86vq4j"]
+
+[ext_resource type="Script" path="res://Node2D.cs" id="1_51o1i"]
+[ext_resource type="Script" path="res://testerthing.cs" id="2_1pep4"]
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_51o1i")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("2_1pep4")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Control"]

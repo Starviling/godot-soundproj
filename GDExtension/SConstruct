@@ -1,0 +1,59 @@
+#!/usr/bin/env python
+import os
+import sys
+
+env = SConscript("godot-cpp/SConstruct")
+
+# For reference:
+# - CCFLAGS are compilation flags shared between C and C++
+# - CFLAGS are for C-specific compilation flags
+# - CXXFLAGS are for C++-specific compilation flags
+# - CPPFLAGS are for pre-processor flags
+# - CPPDEFINES are for pre-processor defines
+# - LINKFLAGS are for linking flags
+
+#  CPPFLAGS=-D_USE_MATH_DEFINES
+#  If debug: cppflag -D_STK_DEBUG_ -D__RTAUDIO_DEBUG__ -D__RTMIDI_DEBUG__
+#            cxxflag -g
+#  else:     cxxflag -O3
+# scons platform=windows generate_bindings=yes use_mingw=yes
+
+
+# tweak this if you want to use different folders, or more folders, to store your source code in.
+env.Append(CPPPATH=["src/", "stk/src/include/", "stk/include/"])
+
+env.Append(CPPFLAGS=["-D_USE_MATH_DEFINES -D__LITTLE_ENDIAN__"])
+stkSrcPath = "stk/src/"
+# ignore realtime, threading, and networking components of the stk lib
+excludeList = [
+    stkSrcPath + "Thread.cpp",
+    stkSrcPath + "Mutex.cpp",
+    stkSrcPath + "UdpSocket.cpp",
+    stkSrcPath + "Socket.cpp",
+    stkSrcPath + "TcpClient.cpp",
+    stkSrcPath + "TcpServer.cpp",
+    stkSrcPath + "InetWvOut.cpp",
+    stkSrcPath + "InetWvIn.cpp",
+    stkSrcPath + "RtAudio.cpp",
+    stkSrcPath + "RtMidi.cpp",
+    stkSrcPath + "RtWvIn.cpp",
+    stkSrcPath + "RtWvOut.cpp"
+]
+sources = Glob("src/*.cpp") + Glob(stkSrcPath + "*.cpp", exclude=excludeList)
+
+
+if env["platform"] == "macos":
+    library = env.SharedLibrary(
+        "../bin/libgdsound.{}.{}.framework/libgdsound.{}.{}".format(
+            env["platform"], env["target"], env["platform"], env["target"]
+        ),
+        source=sources,
+    )
+else:
+    
+
+    library = env.SharedLibrary(
+        "../bin/libgdsound{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
+        source=sources,
+    )
+Default(library)

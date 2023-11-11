@@ -1,0 +1,7 @@
+{
+    "godot_tools.editor_path": "g:\\Godot Versions\\Godot_v4.1.2-stable_mono_win64\\Godot_v4.1.2-stable_mono_win64.exe",
+    "godot_tools.gdscript_lsp_server_port": 6005,
+    "files.associations": {
+        "xtr1common": "cpp"
+    }
+}
